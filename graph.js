@@ -42,21 +42,35 @@ class Graph {
 
   // this function returns an array of Node values using DFS
   depthFirstSearch(start) {
-    let toVisitStack = [start];
-    let seen = new Set(toVisitStack);
+    // iterative solution
+    // let toVisitStack = [start];
+    // let seen = new Set(toVisitStack);
+    // let seenValues = [];
 
-    while(toVisitStack.length) {
-      let currNode = toVisitStack.pop();
-      for (let adj of currNode.adjacent){
+    // while(toVisitStack.length) {
+    //   let currNode = toVisitStack.pop();
+    //   seenValues.push(currNode.value);
+    //   for (let adj of currNode.adjacent){
+    //     if (!seen.has(adj)) {
+    //       toVisitStack.push(adj);
+    //       seen.add(adj);
+    //     }
+    //   }
+    // }
+    // return seenValues;
+    
+    // recursive solution
+    let seenValues = [];
+    function _dfsRecursive(node,seen){
+      seenValues.push(node.value);
+      for (let adj of node.adjacent) {
         if (!seen.has(adj)) {
-          toVisitStack.push(adj);
           seen.add(adj);
+          _dfsRecursive(adj,seen);
         }
       }
     }
-    
-    let seenValues = [];
-    for (let node of seen) seenValues.push(node.value);
+    _dfsRecursive(start,new Set([start]));
     return seenValues;
   }
 
@@ -64,9 +78,12 @@ class Graph {
   breadthFirstSearch(start) {
     let toVisitQueue = [start];
     let seen = new Set(toVisitQueue);
+    let seenValues = [];
 
     while (toVisitQueue.length) {
       let currNode = toVisitQueue.shift();
+      seenValues.push(currNode.value);
+      
       for (let adj of currNode.adjacent) {
         if (!seen.has(adj)) {
           toVisitQueue.push(adj);
@@ -74,9 +91,6 @@ class Graph {
         }
       }
     }
-    
-    let seenValues = [];
-    for (let node of seen) seenValues.push(node.value);
     return seenValues;
   }
 }
